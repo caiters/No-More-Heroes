@@ -1,4 +1,11 @@
-body { padding: 0; margin: 0; }
+$font-stack: "prestige-elite-std",monospace;
+
+// weights
+$normal: 400;
+$bold: 700;
+
+
+body { padding: 0; margin: 0; font-family: $font-stack; }
 .game-screen { height: 100vh; }
 
 .scene { height: 80vh; overflow: hidden;
@@ -6,7 +13,7 @@ body { padding: 0; margin: 0; }
 }
 
 .dialog { height: 20vh; padding: 1em; box-sizing: border-box;
-  &__speaker { font-weight: bold; }
+  &__speaker { font-weight: $bold; font-size: 2em; text-transform: uppercase; }
 }
 
 .character { height: 800px; width: 400px;

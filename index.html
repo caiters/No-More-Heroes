@@ -2,19 +2,23 @@
 <html>
 <head>
   <title>No More Heroes</title>
-  <link rel="stylesheet" href="/css/no-more-heroes.css"
+  <script src="https://use.typekit.net/zqy6psv.js"></script>
+  <script>try{Typekit.load({ async: true });}catch(e){}</script>
+  <link rel="stylesheet" href="/css/no-more-heroes.css" />
 </head>
 <body ng-app="noMoreHeroesApp">
   <div ng-controller="sceneCtrl" class="game-screen">
-    <div class="scene scene--woods">
-      <div class="character character--left cicada">
+    <div class="scene scene--{{scene.class}}">
+      <div class="character character--left {{scene.characterLeft}}">
       </div>
-      <div class="character character--right sam">
+      <div class="character character--right {{scene.characterRight}}">
       </div>
     </div>
     <div class="dialog" ng-controller="dialogCtrl">
-      <div class="dialog__speaker">{{speaker}}</div>
-      <p ng-bind-html="dialog"></p>
+      <div class="dialog__speaker">{{dialog.class}}</div>
+      <p ng-bind-html=""></p>
+      <button ng-click="nextSlide()">Continue</button>
+      <p>Current Dialog Slide: {{slide}}</p>
     </div>
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>

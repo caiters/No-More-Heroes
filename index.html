@@ -15,8 +15,8 @@
       </div>
     </div>
     <div class="dialog" ng-controller="dialogCtrl">
-      <div class="dialog__speaker">{{dialog.class}}</div>
-      <p ng-bind-html=""></p>
+      <div class="dialog__speaker">{{dialog.dialog[slide].speaker}}</div>
+      <p ng-bind-html="dialog.dialog[slide].dialog"></p>
       <button ng-click="nextSlide()">Continue</button>
       <p>Current Dialog Slide: {{slide}}</p>
     </div>

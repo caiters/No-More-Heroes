@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head>
+  <title>No More Heroes</title>
+  <link rel="stylesheet" href="/css/no-more-heroes.css"
+</head>
+<body ng-app="noMoreHeroesApp">
+  <div ng-controller="sceneCtrl" class="game-screen">
+    <div class="scene scene--woods">
+      <div class="character character--left cicada">
+      </div>
+      <div class="character character--right sam">
+      </div>
+    </div>
+    <div class="dialog" ng-controller="dialogCtrl">
+      <div class="dialog__speaker">{{speaker}}</div>
+      <p ng-bind-html="dialog"></p>
+    </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-sanitize.js"></script>
+  <script src="scripts/no-more-heroes.js"></script>
+</body>
+</html>

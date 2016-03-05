@@ -2,70 +2,54 @@ var noMoreHeroesApp = angular.module('noMoreHeroesApp', ['ngSanitize']);
 
 noMoreHeroesApp.controller('sceneCtrl', function($scope, sceneService){
   // scene data
-  var scene = sceneService;
+  var setup = sceneService.getSetup();
 
-  $scope.scene = scene;
-
-  // controls which step of the dialog in scene data that we're on
-  var slide = 0;
-  $scope.slide = slide;
-
-  // show characters
-
-  // left character
-  var characterLeft = scene.dialog[slide].characterLeft;
-  $scope.characterLeft = characterLeft;
-  var characterLeftExpression = 'neutral'; // default value
-  $scope.characterLeftExpression = characterLeftExpression;
-
-  // right character
-  var characterRight = scene.dialog[slide].characterRight;
-  $scope.characterRight = characterRight;
-  var characterRightExpression = 'neutral'; // default value
-  $scope.characterRightExpression = characterRightExpression;
-
-  /*
-    when you advance to a new slide...
-    1. check position.
-      if position has changed...
-        a. we should see if the speaker is still the same.
-        if the speaker is still the same...
-          a. we should check if their expression has changed.
-          if their expression has changed...
-            a. change characterRightExpression
-  */
-
-  // advances to the next dialog step
-  $scope.nextSlide = function(){
-    var oldCharacterLeft = characterLeft;
-    var oldCharacterRight = characterRight;
-    var oldCharacterLeftExpression = characterLeftExpression;
-    var oldCharacterRightExpression = characterRightExpression;
-    var oldPosition = scene.dialog[slide].position;
-    console.log(oldPosition);
-    slide++;
-    console.log(slide);
-    // compare old to new
-    if ( oldPosition === scene.dialog[slide].position) {
-      console.log('same');
+  $scope.characterLeft = setup.characterLeft;
+  $scope.characterRight = setup.characterRight;
+  $scope.background = setup.background;
+  $scope.$on('dialog', function(previous,next){
+    if(next.position === 'left') {
+      $scope.characterLeft = {
+        name: next.speaker,
+        expression: next.expression
+      }
     } else {
-      console.log('different');
+      $scope.characterRight = {
+        name: next.speaker,
+        expression: next.expression
+      }
     }
-  };
+  });
 });
 
 noMoreHeroesApp.controller('dialogCtrl', function($scope, sceneService){
-  var scene = sceneService;
-  $scope.dialog = scene.dialog;
+  $scope.dialog = 'test';
+  $scope.speaker = 'test';
+  $scope.nextSlide = function(){
+    sceneService.next();
+  };
+  $scope.$on('dialog', function(previous,next){
+    $scope.dialog = next.dialog;
+    $scope.speaker = next.speaker;
+  });
 });
 
-noMoreHeroesApp.service('sceneService', function(){
+noMoreHeroesApp.service('sceneService', function($rootScope){
   var sceneAPI = {
-    class: 'woods',
-    characterLeft: 'cicada',
-    characterRight: 'sam',
+    setup: {
+      background: 'woods',
+      characterLeft: {
+        name: 'cicada',
+        expression: 'neutral'
+      },
+      characterRight: {
+        name:'sam',
+        expression:'neutral'
+      }
+    },
     dialog: [
       {
+
         speaker: 'sam',
         position: 'right',
         expression: 'happy',
@@ -91,6 +75,7 @@ noMoreHeroesApp.service('sceneService', function(){
       },
       {
         speaker: 'cicada',
+        position: 'left',
         expression: 'annoyed',
         dialog: '<p>I swear, I hate you. I never should have told you!</p>'
       },
@@ -149,7 +134,19 @@ noMoreHeroesApp.service('sceneService', function(){
     ]
   };
 
-  // eventually we'll get data from an API instead of having it be hard coded
+  this.current = 0;
+  this.getSetup = function(){
+    return sceneAPI.setup;
+  };
+  this.getDialog = function(){
+    return sceneAPI.dialog[this.current];
+  };
+  this.next = function(){
+    var previous = this.getDialog();
+    this.current++;
+    var next = this.getDialog();
+    $rootScope.$broadcast('dialog', previous, next);
+    console.log(next, 'next dialog');
+  };
 
-  return sceneAPI;
 });

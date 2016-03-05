@@ -1,14 +1,62 @@
 var noMoreHeroesApp = angular.module('noMoreHeroesApp', ['ngSanitize']);
 
 noMoreHeroesApp.controller('sceneCtrl', function($scope, sceneService){
-  $scope.scene = sceneService;
-  $scope.slide = 0;
-  $scope.nextSlide = function(){$scope.slide++};
+  // scene data
+  var scene = sceneService;
+
+  $scope.scene = scene;
+
+  // controls which step of the dialog in scene data that we're on
+  var slide = 0;
+  $scope.slide = slide;
+
+  // show characters
+
+  // left character
+  var characterLeft = scene.dialog[slide].characterLeft;
+  $scope.characterLeft = characterLeft;
+  var characterLeftExpression = 'neutral'; // default value
+  $scope.characterLeftExpression = characterLeftExpression;
+
+  // right character
+  var characterRight = scene.dialog[slide].characterRight;
+  $scope.characterRight = characterRight;
+  var characterRightExpression = 'neutral'; // default value
+  $scope.characterRightExpression = characterRightExpression;
+
+  /*
+    when you advance to a new slide...
+    1. check position.
+      if position has changed...
+        a. we should see if the speaker is still the same.
+        if the speaker is still the same...
+          a. we should check if their expression has changed.
+          if their expression has changed...
+            a. change characterRightExpression
+  */
+
+  // advances to the next dialog step
+  $scope.nextSlide = function(){
+    var oldCharacterLeft = characterLeft;
+    var oldCharacterRight = characterRight;
+    var oldCharacterLeftExpression = characterLeftExpression;
+    var oldCharacterRightExpression = characterRightExpression;
+    var oldPosition = scene.dialog[slide].position;
+    console.log(oldPosition);
+    slide++;
+    console.log(slide);
+    // compare old to new
+    if ( oldPosition === scene.dialog[slide].position) {
+      console.log('same');
+    } else {
+      console.log('different');
+    }
+  };
 });
 
-noMoreHeroesApp.controller('dialogCtrl', function($scope, $sce, sceneService){
-  $scope.dialog = sceneService;
-  //$scope.dialog = $sce.trustAsHtml('<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam nulla mi, porta a neque ut, tempor euismod ex. Cras id eros eget nunc auctor scelerisque. Sed eu arcu blandit, commodo quam eu, blandit est.</p>');
+noMoreHeroesApp.controller('dialogCtrl', function($scope, sceneService){
+  var scene = sceneService;
+  $scope.dialog = scene.dialog;
 });
 
 noMoreHeroesApp.service('sceneService', function(){
@@ -19,20 +67,25 @@ noMoreHeroesApp.service('sceneService', function(){
     dialog: [
       {
         speaker: 'sam',
-        expression: 'neutral',
+        position: 'right',
+        expression: 'happy',
         dialog: '<p>I’m really happy about this project, Cicada. I think Mrs. Anderson will really appreciate our work.</p>'
       },
       {
         speaker: 'cicada',
+        position: 'left',
         expression: 'skeptical',
         dialog: '<p>Even though I made you do an investigative report on book heroines, not heroes?</p>'
       },
       {
         speaker: 'sam',
+        position: 'right',
+        expression: 'happy',
         dialog: '<p>Hey now, don’t be like that. It’s not my fault everyone writes ridiculous characters in young adult lit.</p>'
       },
       {
         speaker: 'sam',
+        position: 'right',
         expression: 'side-glance',
         dialog: '<p>...And that people like your mom get obsessed with them.</p>'
       },
@@ -43,27 +96,39 @@ noMoreHeroesApp.service('sceneService', function(){
       },
       {
         speaker: 'sam',
+        position: 'right',
         expression: 'sheepish',
         dialog: '<p>I mean, it’s not like it wasn’t clear! Cicada? You’re named after a tree cricket, for crying out loud.</p>'
       },
       {
         speaker: 'cicada',
+        position: 'left',
         expression: 'sulky',
         dialog: '<p>It’s not MY fault my mother never outgrew her love for badly written stories with terrible character names. I figured doing a report on the genre might help me understand her better, or get some perspective, I don’t know.</p>'
       },
       {
         speaker: 'sam',
+        position: 'right',
         expression: 'sly',
         dialog: '<p>Well, I think you might have more luck talking to your namesake. I see one over there.</p>'
       },
       {
         speaker: 'cicada',
+        position: 'left',
         expression: 'angry',
         dialog: '...'
       },
       {
         speaker: 'sam',
-        dialog: '<p>I’m joking, I’m joking! I’m sorry. But uh, does it seem darker to you?</p>'
+        position: 'right',
+        expression: 'sheepish',
+        dialog: '<p>I’m joking, I’m joking! I’m sorry.</p>'
+      },
+      {
+        speaker: 'sam',
+        position: 'right',
+        expression: 'worried',
+        dialog: '<p>But uh, does it seem darker to you?</p>'
       },
       {
         speaker: 'narrator',
@@ -72,6 +137,7 @@ noMoreHeroesApp.service('sceneService', function(){
       },
       {
         speaker: 'cicada',
+        position: 'left',
         expression: 'worried',
         dialog: '<p>Rain?? What the...let’s run for it! The dorms are just over there!</p>'
       },

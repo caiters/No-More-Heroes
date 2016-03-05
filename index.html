@@ -9,14 +9,19 @@
 <body ng-app="noMoreHeroesApp">
   <div ng-controller="sceneCtrl" class="game-screen">
     <div class="scene scene--{{scene.class}}">
-      <div class="character character--left {{scene.characterLeft}}">
+      <div class="character character--left {{scene.characterLeft}} {{scene.characterLeft}}--{{characterLeftExpression}}">
       </div>
-      <div class="character character--right {{scene.characterRight}}">
+      <div class="character character--right {{scene.characterRight}} {{scene.characterRight}}--{{characterRightExpression}}">
       </div>
     </div>
     <div class="dialog" ng-controller="dialogCtrl">
-      <div class="dialog__speaker">{{dialog.dialog[slide].speaker}}</div>
-      <p ng-bind-html="dialog.dialog[slide].dialog"></p>
+      <div class="dialog__speaker">{{dialog[slide].speaker}}</div>
+      <!--
+        Eventually we probably want this dialog to be entered like game text normally is, one character at a time. Just need to make sure to ignore html tags when we do it.
+        We might want to make it so you can hit a button to skip to the end.
+        Need to make sure you can't hit continue unless the text is displayed.
+      -->
+      <p ng-bind-html="dialog[slide].dialog"></p>
       <button ng-click="nextSlide()">Continue</button>
       <p>Current Dialog Slide: {{slide}}</p>
     </div>

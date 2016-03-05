@@ -8,7 +8,9 @@ noMoreHeroesApp.controller('sceneCtrl', function($scope, sceneService){
   $scope.characterRight = setup.characterRight;
   $scope.background = setup.background;
   $scope.$on('dialog', function(previous,next){
-    if(next.position === 'left') {
+    if(next.position == null) {
+      console.log('no next position');
+    } else if(next.position === 'left') {
       $scope.characterLeft = {
         name: next.speaker,
         expression: next.expression

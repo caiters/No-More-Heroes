@@ -25,8 +25,9 @@ noMoreHeroesApp.controller('sceneCtrl', function($scope, sceneService){
 });
 
 noMoreHeroesApp.controller('dialogCtrl', function($scope, sceneService){
-  $scope.dialog = 'test';
-  $scope.speaker = 'test';
+  var setup = sceneService.getSetup();
+  $scope.dialog = setup.dialog;
+  $scope.speaker = setup.speaker;
   $scope.nextSlide = function(){
     sceneService.next();
   };
@@ -39,6 +40,8 @@ noMoreHeroesApp.controller('dialogCtrl', function($scope, sceneService){
 noMoreHeroesApp.service('sceneService', function($rootScope){
   var sceneAPI = {
     setup: {
+      speaker: 'narrator',
+      dialog: '<p>Cicada and Sam are walking through the woods.</p>',
       background: 'woods',
       characterLeft: {
         name: 'cicada',
